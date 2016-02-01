@@ -105,6 +105,11 @@
   * Easy to write new tools/implementations in various languages
 * Compact and unambigious, improving ability to understand and evolve specification
 
+#### Canonical JSON format
+
+* Events can be represented in JSON such that common types and formats are presented in the canonical way
+* All tooling capable of reading and writing JSON rather than protobuf
+
 ##### The bad
 
 * Not plain text, requires tools to read
