@@ -90,6 +90,8 @@
     * BasicAuth
     * Bearer Tokens
 * Host based routing allows for servers to aggregate logs for many different orgs and separate them out easily
+* Servers can throttle clients to induce backpressure and keep the system running
+* Content-Encodings such as gzip can be utilized transparently
 
 ##### The bad
 
