@@ -1,5 +1,16 @@
 # eventd - A syslog replacement
 
+### Goals
+
+* Establish a common format for log/event data
+* Establish a standard transport for log/event data
+  * The transport provide reliable delivery, meaning the sender must get acknowledgment
+* Work with existing projects to integrate the new format/transport
+
+### Non-Goals
+
+* Replace all existing logging software with a different piece of logging software
+
 ### Current landscape
 
 #### What's wrong with syslog
@@ -95,6 +106,44 @@
 * Lots of libraries, makes application integration easy
 * Native structured logging mechanism
 * An ecosystem of plugins support various transports
+
+#### What's wrong with fluentd?
+
+* Custom forwarding protocol, makes interoperating difficult
+* Custom protocol is not reliable, no acking done
+* No ability to detect and switch formats automatically
+
+#### What's good about fluentd?
+
+* Custom protocol handles load balancing and fail over
+  * Though lack of acking makes this process pretty lossy
+* Structured logging via JSON and MessagePack
+* Ability to integrate with syslog
+* Large ecosystem of plugins to give users maximum flexibility
+
+#### What's wrong with flume?
+
+* No structured logging support
+  * Events are a header (string map) and body (bytes)
+* Effectively custom protocols for introducing data reliably
+  * Avro and Thrift have very small mindshares wrt logging
+* Very technical configuration
+  * Hard for users to get started with it
+* JSON format not canonical for existing JSON events
+  * Sepearate header/body subobjects
+  * Timestamp is a quoted number
+* No ability to provide authentication/authorization with sinks
+
+#### What's good about flume?
+
+* A few reliable protocols for users to pick from (including HTTP)
+* Well documented ability to form pipelines between flume instances
+* Nice set of source types gives users flexibility
+* Utilization of batching as a core concept
+* Large ecosystem of plugins for maximum flexibility
+* The ability to overflow data to disk if outputs are backing up
+
+
 
 ### Desired Features
 
