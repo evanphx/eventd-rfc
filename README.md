@@ -80,6 +80,22 @@
 * Supports syslog
 * An ecosystem of existing shippers to get logs into the system
 
+#### What's wrong with GELF?
+
+* UDP usage is recommended and is not reliable at the network and application layer
+* Mandates compression per message, increasing processing power per message significantly
+* Forces users into awkward underscore prefixed notation to send structured data (ie, not canonical JSON)
+* Timestamps don't mandate nanosecond precision
+* No reliable transmission of log data
+  * Graylog mentions an HTTP input plugin, but no documentation could be found
+  * Unknown if an HTTP output plugin exists
+
+#### What's good about GELF?
+
+* Lots of libraries, makes application integration easy
+* Native structured logging mechanism
+* An ecosystem of plugins support various transports
+
 ### Desired Features
 
 #### Reliable Delivery
