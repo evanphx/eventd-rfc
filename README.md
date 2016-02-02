@@ -19,6 +19,20 @@
   * Easy to implement
 * Highly visible, extremely well integrated already
 
+#### What's wrong with rsyslog
+
+* Using structured logging is cumbersome
+* Difficult to configure
+  * Undesirable config file format
+
+#### What's good about rsyslog
+
+* High performance implementation
+* Lots of plugins to route data to various places
+* "A standard" amongst ops folks
+* Reliable sending via RELP
+* Exposes json data about logs
+
 #### Why not systemd-journal
 
 * Few people using it for centralization
@@ -48,6 +62,23 @@
   * Include units per attribute (seconds, milliseconds, uri, email, etc)
 * Reliable delivery via builtin TCP transport
 * Highly configurable, easy to route logs to interesting places
+
+#### What's wrong with logstash?
+
+* No mandated format
+  * Leaves users guessing on how to structured their data
+* Requiring java turns many users away
+* Difficult (if possible at all) to dynamicly detect different message encodings
+  * Meaning sending json or plain text over syslog isn't possible without treating the json as plain text
+* Only supports minimal internal buffering
+  * High volume servers with outputs that go away for even a moment grind to a halt
+  * Highly impactful when coupled with reliable delivery output plugins
+
+#### What's good about logstash?
+
+* Highly, highly configurable
+* Supports syslog
+* An ecosystem of existing shippers to get logs into the system
 
 ### Desired Features
 
