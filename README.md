@@ -110,7 +110,8 @@
 #### What's wrong with fluentd?
 
 * Custom forwarding protocol, makes interoperating difficult
-* Custom protocol is not reliable, no acking done
+  * Enabling reliable mode of protocol slightly confusing, off by default
+* Secure version of the protocol handled by separate plugin that doesn't support reliable delivery
 * No ability to detect and switch formats automatically
 
 #### What's good about fluentd?
