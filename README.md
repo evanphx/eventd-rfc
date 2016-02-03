@@ -146,6 +146,36 @@
 * Large ecosystem of plugins for maximum flexibility
 * The ability to overflow data to disk if outputs are backing up
 
+#### What's wrong with CEF (https://protect724.hp.com/docs/DOC-1072)
+
+* Ad-hoc protocol definition (data delimited by pipe characters)
+* Expects to piggy back on syslog
+* Overly specific regarding network events
+  * Seems like it was designed with IPS integration in mind
+  * Items such as device vendor, product, and version hardcoded even though rarely used in general logging
+
+#### What's good about CEF
+
+* Very short specification, easy to implement
+* Specifies a key dictionary to help with interop
+
+#### What's wrong with CEE (http://cee.mitre.org)
+
+* Project appears to be dead
+* Mandates supporting both JSON and XML for data formatting
+* Lengthy specificication, easy for implementors to diverge and skip sections
+* Ambigious transport specification
+  * For instance: "The CLT protocol shall maintain integrity mechanisms to resist to tampering by local administrator". What does that mean in the context of implementation?
+* Wire transport appears to simply piggy back on syslog, thus not reliable
+
+
+#### What's good about CEE?
+
+* Usage of tagging to switch decoding in ambigious context
+  * `@cee:` prefix in syslog message
+* JSON representation is canonical JSON, easy for implementation
+* Establishes a field dictionary to assist in event interop
+
 ### Feature breakdown and comparison
 
 #### Structured Logging format
