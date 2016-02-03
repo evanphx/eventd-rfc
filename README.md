@@ -66,6 +66,7 @@
   * HMAC per
 * Highly configurable, not a great out of the box expeirence
 * No text format for the native format, makes it harder to interact with
+* Native TCP transport does not do reliable delivery
 
 #### What's good about heka?
 
@@ -73,6 +74,7 @@
   * Include units per attribute (seconds, milliseconds, uri, email, etc)
 * Reliable delivery via builtin TCP transport
 * Highly configurable, easy to route logs to interesting places
+* HTTP based input and outputs with header configuration
 
 #### What's wrong with logstash?
 
@@ -144,7 +146,42 @@
 * Large ecosystem of plugins for maximum flexibility
 * The ability to overflow data to disk if outputs are backing up
 
+### Feature breakdown and comparison
 
+#### Structured Logging format
+
+* Support for JSON as a first class structured format is high
+  * Flume's support is a misnomer, the users data isn't structured
+* Syslog can carry JSON in the message body when necessary
+* Fluentd also supports MessagePack and uses it as it's internal wire protocol too
+* Logstash's JSON is the most generic, mandating only @timestamp and @version
+  * https://logstash.jira.com/browse/LOGSTASH-675
+  * Clear preference for storing user data at the toplevel
+* Heka uses an internal protobuf representation of the data
+* Using JSON only brings some typical questions:
+  * Can large integers be represented as native numbers properly? Or do we resort to quoted numbers?
+  * How should timestamps be represented?
+    * There is a large question about leap second visibility in events as well
+  * How should binary values be represented?
+    * Systemd represents them as an integer of numbers
+    * Golang represents them by base64 encoding the binary
+    * A subobject would have to used to transmit the proper data to the receiver in either case
+
+##### Open Questions
+
+* Should there be a common binary format as well as text (likely JSON at this point)?
+* Would a binary format allow for faster aggregator handling?
+
+#### Transport
+
+* syslog protocol is the only common format support (and some don't even support it)
+* Every project has their own native (ie, ad-hoc) protocol 
+* A common protocol would reduce bugs in all projects and increase usefulness
+  * Each reliable delivery protocol uses slightly different, ad-hoc rules to enforce reliability
+* Existing reliable delivery protocols utilize head blocking, meaning they're the same as batch sending
+* Primary downside of sender side batching is the receiver side doesn't see the flow of messages even if reliable delivery would cause the sender to block like it was a batch
+  * This can be mitigating with HTTP by having the client start a "long POST" and trickle the data across the wire as it comes in
+  * This still requires the sender to buffer data in case receiver crashes or returns non-200
 
 ### Desired Features
 
