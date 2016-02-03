@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+package event;
+
+// A future proof time representation. Could use TAI64N for leapsecond tolerance
+message Timestamp {
+  int64 seconds = 1;
+  int32 nanoseconds = 2;
+}
+
+enum AttributeType {
+  STRING  = 0; // v_string
+  INTEGER = 1; // v_int
+  FLOAT   = 2; // v_float
+  BOOL    = 3; // v_bool
+  BYTES   = 4; // v_bytes
+  ARRAY   = 5; // v_attributes, ignoring name, using position
+  OBJECT  = 6; // v_attributes, using names
+}
+
+// A typed data item
+message Attribute {
+  string name = 1;
+  string unit = 2; // indicates the units/represent of the value
+                   // s=seconds, ms=milliseconds, uri=uri
+                   // Probably should establish a RFC vocab
+
+  AttributeType type = 3;
+
+  string v_string = 4;
+  int64  v_int    = 5;
+  double v_float  = 6;
+  bool   v_bool   = 7;
+  bytes  v_bytes  = 8;
+
+  repeated Attribute v_attributes = 9;
+}
+
+// An event, holding a timestamp and a set of name attributes
+message Event {
+  Timestamp timestamp = 1;
+  repeated Attribute attributes = 2;
+}
