@@ -176,6 +176,22 @@
 * JSON representation is canonical JSON, easy for implementation
 * Establishes a field dictionary to assist in event interop
 
+#### What's wrong with metrics2.0 (http://metrics20.org)
+
+* Project appears to be dead
+* Wire transport lacks reliable delivery, making it unfit for important data
+* Wire transport is ad-hoc
+* Fails to specify a transport
+  * Interoperability unlikely
+* Only used by a few projects
+
+#### What's good about metrics2.0
+
+* Uses a structured format for all data
+* Separates data from meta-data within each item
+* Mandates a unit is applied to a value
+* Specifies a key dictionary to help with interop
+
 ### Feature breakdown and comparison
 
 #### Structured Logging format
