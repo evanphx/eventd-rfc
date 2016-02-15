@@ -285,6 +285,12 @@
   * Easy to write new tools/implementations in various languages
 * Compact and unambigious, improving ability to understand and evolve specification
 
+##### The bad
+
+* Not plain text, requires tools to read
+* Requires some custom framing for unterminated, append only files
+  * Can be as minimal as a varint size header
+
 #### Canonical JSON format
 
 * Events can be represented in JSON such that common types and formats are presented in the canonical way
@@ -292,9 +298,28 @@
 
 ##### The bad
 
-* Not plain text, requires tools to read
-* Requires some custom framing for unterminated, append only files
-  * Can be as minimal as a varint size header
+Ambiguity created when a unit needs to be applied to a ground type value (string, number, etc):
+
+```
+{
+  "duration": {
+    "value": 3242,
+    "unit": "ms"
+  }
+}
+```
+
+It's not clear if this is an value with a unit or an arbitrary user object.
+
+##### Solution
+
+One solution is be flexible with the input format for clients that don't want/need to
+know about our extended features (such as units). That means that we need a signal value
+to indicate that the JSON is using our non-canonical schema.
+
+* Option 1: Transport mimetype indicates which schema is used
+* Option 2: Toplevel object key which indicates the schema. Could be `@version: 2` or `@schema: "enhanced"` or something else
+* Option 3: Becuase units are the reason a ground value might be wrapped in an object, use a specially worded unit key to switch off, such as `@unit`
 
 #### Syslog listener
 
